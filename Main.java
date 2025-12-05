@@ -29,12 +29,14 @@ public class Main {
             }
         }
         int maxCom=0;
+        int maxProfit=0;
         for(int i=0;i<5;i++){
-            if(sum[i]>maxCom){
+            if(sum[i]>maxProfit){
                 maxCom=i;
+                maxProfit=sum[i];
             }
         }
-        return commodities[maxCom]+" "+sum[maxCom];
+        return commodities[maxCom]+" "+maxProfit;
     }
 
     public static int totalProfitOnDay(int month, int day) {
@@ -49,11 +51,46 @@ public class Main {
        }
 
         public static int commodityProfitInRange(String commodity, int from, int to) {
-           return 1234;
-       }
+            int totalProfit=0;
+            int comNum=0;
+
+            for(int i=0;i<5;i++) {
+                if (commodity==commodities[i]) {
+                    comNum=i;
+                    break;
+                }
+            }
+            if(comNum==-1) return -99999;
+
+            if(from<0||from>27||to<0||to>27||from>to) {
+                return -99999;
+            }
+
+            for(int month=0;month<12;month++) {
+                for (int i = from; i < to; i++) {
+                    totalProfit += data[month][i][comNum];
+                }
+            }
+            return totalProfit;
+        }
 
         public static int bestDayOfMonth(int month) {
-           return 1234;
+            if(month<0||month>11) return -1;
+            int profit[]=new int[28];
+            int highestProfitDay=0;
+            for(int day=0;day<28;day++){
+                for(int com=0;com<5;com++){
+                    profit[day]+=data[month][day][com];
+                }
+            }
+            int highestProfit=profit[0];
+            for(int i=1;i<28;i++){
+                if(profit[i]>highestProfit){
+                    highestProfit=profit[i];
+                    highestProfitDay=i;
+                }
+            }
+            return highestProfitDay+1;
         }
     
         public static String bestMonthForCommodity(String comm) {
