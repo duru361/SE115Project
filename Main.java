@@ -149,11 +149,48 @@ public class Main {
         }
 
         public static int daysAboveThreshold (String comm,int threshold){
-            return 1234;
+         int thresholdDay=0;
+         int comNum=-1;
+         for(int i=0;i<COMMS;i++){
+             if(comm==commodities[i]){
+                 comNum=i;
+                 break;
+             }
+         }
+         if(comNum==-1) return -1;
+
+         for(int month=0;month<MONTHS;month++){
+             for(int day=0;day<DAYS;day++){
+                 if(data[month][day][comNum]>threshold){
+                     thresholdDay++;
+                 }
+             }
+         }
+            return thresholdDay;
         }
 
         public static int biggestDailySwing ( int month){
-            return 1234;
+        if(month<0||month>11) return -99999;
+        int profits[]=new int[DAYS];
+        int dailySwing[]=new int[DAYS];
+        for(int days=0;days<DAYS;days++){
+            for(int com=0;com<COMMS;com++){
+                profits[days]+=data[month][days][com];
+            }
+        }
+        for(int i=0;i<DAYS-1;i++){
+            dailySwing[i]=profits[i+1]-profits[i];
+            if(dailySwing[i]<0){
+                dailySwing[i]*=-1;
+            }
+        }
+        int biggest=dailySwing[0];
+        for(int i=1;i<DAYS-1;i++){
+            if(dailySwing[i]>biggest){
+                biggest=dailySwing[i];
+            }
+        }
+            return biggest;
         }
 
         public static String compareTwoCommodities (String c1, String c2){
