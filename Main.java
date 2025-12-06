@@ -30,7 +30,7 @@ public class Main {
         }
         int maxCom=0;
         int maxProfit=0;
-        for(int i=0;i<5;i++){
+        for(int i=0;i<COMMS;i++){
             if(sum[i]>maxProfit){
                 maxCom=i;
                 maxProfit=sum[i];
@@ -44,7 +44,7 @@ public class Main {
         if(month<0||month>11||day<0||day>27){
             return -99999;
         }
-        for(int i=0;i<5;i++){
+        for(int i=0;i<COMMS;i++){
             totalProfit+=data[month][day][i];
         }
         return totalProfit;
@@ -52,9 +52,9 @@ public class Main {
 
         public static int commodityProfitInRange(String commodity, int from, int to) {
             int totalProfit=0;
-            int comNum=0;
+            int comNum=-1;
 
-            for(int i=0;i<5;i++) {
+            for(int i=0;i<COMMS;i++) {
                 if (commodity==commodities[i]) {
                     comNum=i;
                     break;
@@ -66,7 +66,7 @@ public class Main {
                 return -99999;
             }
 
-            for(int month=0;month<12;month++) {
+            for(int month=0;month<MONTHS;month++) {
                 for (int i = from; i < to; i++) {
                     totalProfit += data[month][i][comNum];
                 }
@@ -76,15 +76,15 @@ public class Main {
 
         public static int bestDayOfMonth(int month) {
             if(month<0||month>11) return -1;
-            int profit[]=new int[28];
+            int profit[]=new int[DAYS];
             int highestProfitDay=0;
-            for(int day=0;day<28;day++){
-                for(int com=0;com<5;com++){
+            for(int day=0;day<DAYS;day++){
+                for(int com=0;com<COMMS;com++){
                     profit[day]+=data[month][day][com];
                 }
             }
             int highestProfit=profit[0];
-            for(int i=1;i<28;i++){
+            for(int i=1;i<DAYS;i++){
                 if(profit[i]>highestProfit){
                     highestProfit=profit[i];
                     highestProfitDay=i;
@@ -94,11 +94,58 @@ public class Main {
         }
     
         public static String bestMonthForCommodity(String comm) {
-           return "DUMMY";
+            int comNum = -1;
+            int highestProfitMonth = 0;
+            int monthsProfit[] = new int[MONTHS];
+            for (int i = 0; i < 5; i++) {
+                if (commodities[i] == comm) {
+                    comNum = i;
+                    break;
+                }
+            }
+            if (comNum == -1) return "INVALID_COMMODITY";
+
+            for (int month = 0; month < MONTHS; month++) {
+                for (int day = 0; day < DAYS; day++) {
+                    monthsProfit[month] += data[month][day][comNum];
+                }
+            }
+            int highestProfit =monthsProfit[0];
+            for (int i = 1; i <MONTHS; i++) {
+                if (monthsProfit[i] > highestProfit) {
+                    highestProfit = monthsProfit[i];
+                    highestProfitMonth = i;
+                }
+            }
+            return months[highestProfitMonth];
         }
 
         public static int consecutiveLossDays (String comm){
-           return 1234;
+            int comNum=-1;
+            for(int i=0;i<COMMS;i++){
+                if(comm==commodities[i]) {
+                    comNum = i;
+                    break;
+                }
+            }
+            if(comNum==-1){
+                return -1;
+            }
+            int lossStreak=0;
+            int longestStreak=0;
+            for(int month=0;month<MONTHS;month++){
+                for(int day=0;day<DAYS;day++){
+                    if(data[month][day][comNum]<0){
+                        lossStreak++;
+                    }
+                    else lossStreak=0;
+
+                    if(lossStreak>longestStreak){
+                        longestStreak=lossStreak;
+                    }
+                }
+            }
+            return longestStreak;
         }
 
         public static int daysAboveThreshold (String comm,int threshold){
