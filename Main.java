@@ -22,9 +22,9 @@ public class Main {
         if(month<0||month>11){
             return "INVALID_MONTH";
         }
-        int sum[]=new int[5];
-        for(int i=0;i<28;i++){
-            for(int j=0;j<5;j++){
+        int[] sum=new int[COMMS];
+        for(int i=0;i<DAYS;i++){
+            for(int j=0;j<COMMS;j++){
                 sum[j]+=data[month][i][j];
             }
         }
@@ -55,14 +55,14 @@ public class Main {
             int comNum=-1;
 
             for(int i=0;i<COMMS;i++) {
-                if (commodity==commodities[i]) {
+                if (commodity.equals(commodities[i])) {
                     comNum=i;
                     break;
                 }
             }
             if(comNum==-1) return -99999;
 
-            if(from<0||from>27||to<0||to>27||from>to) {
+            if(from < 0||to < 0||to > 27||from > to) {
                 return -99999;
             }
 
@@ -76,7 +76,7 @@ public class Main {
 
         public static int bestDayOfMonth(int month) {
             if(month<0||month>11) return -1;
-            int profit[]=new int[DAYS];
+            int[] profit=new int[DAYS];
             int highestProfitDay=0;
             for(int day=0;day<DAYS;day++){
                 for(int com=0;com<COMMS;com++){
@@ -96,9 +96,9 @@ public class Main {
         public static String bestMonthForCommodity(String comm) {
             int comNum = -1;
             int highestProfitMonth = 0;
-            int monthsProfit[] = new int[MONTHS];
-            for (int i = 0; i < 5; i++) {
-                if (commodities[i] == comm) {
+            int [] monthsProfit = new int[MONTHS];
+            for (int i = 0; i < COMMS; i++) {
+                if (commodities[i].equals(comm)) {
                     comNum = i;
                     break;
                 }
@@ -123,7 +123,7 @@ public class Main {
         public static int consecutiveLossDays (String comm){
             int comNum=-1;
             for(int i=0;i<COMMS;i++){
-                if(comm==commodities[i]) {
+                if(comm.equals(commodities[i])) {
                     comNum = i;
                     break;
                 }
@@ -152,7 +152,7 @@ public class Main {
          int thresholdDay=0;
          int comNum=-1;
          for(int i=0;i<COMMS;i++){
-             if(comm==commodities[i]){
+             if(comm.equals(commodities[i])){
                  comNum=i;
                  break;
              }
@@ -171,8 +171,8 @@ public class Main {
 
         public static int biggestDailySwing ( int month){
         if(month<0||month>11) return -99999;
-        int profits[]=new int[DAYS];
-        int dailySwing[]=new int[DAYS];
+        int[] profits=new int[DAYS];
+        int[] dailySwing=new int[DAYS];
         for(int days=0;days<DAYS;days++){
             for(int com=0;com<COMMS;com++){
                 profits[days]+=data[month][days][com];
@@ -194,11 +194,77 @@ public class Main {
         }
 
         public static String compareTwoCommodities (String c1, String c2){
-            return "DUMMY is better by 1234";
+        int comNum1=-1;
+        int comNum2=-1;
+        for(int i=0;i<COMMS;i++){
+            if(c1.equals(commodities[i])){
+                comNum1=i;
+                break;
+            }
+        }
+            for(int i=0;i<COMMS;i++){
+                if(c2.equals(commodities[i])){
+                    comNum2=i;
+                    break;
+                }
+            }
+        if(comNum1==-1||comNum2==-1){
+            return "INVALID_COMMODITY";
+        }
+            int profitOfC1=0;
+            int profitOfC2=0;
+            for(int month=0;month<MONTHS;month++){
+                for(int day=0;day<DAYS;day++){
+                    profitOfC1+=data[month][day][comNum1];
+                    profitOfC2+=data[month][day][comNum2];
+                }
+            }
+            int difference;
+            String comm;
+            if(profitOfC1>profitOfC2){
+                comm=c1;
+               difference=profitOfC1-profitOfC2;
+            } else if (profitOfC1<profitOfC2) {
+                comm=c2;
+                difference=profitOfC2-profitOfC1;
+            }
+            else return "Equal";
+
+            return comm +" is better by "+difference;
         }
 
         public static String bestWeekOfMonth ( int month){
-            return "DUMMY";
+        if(month<0||month>11){
+            return "INVALID_MONTH";
+        }
+       int[] weekProfit=new int[4];
+        for(int day=0;day<7;day++){
+            for(int com=0;com<COMMS;com++){
+                weekProfit[0]+=data[month][day][com];
+            }
+        }
+        for(int day=7;day<14;day++){
+            for(int com=0;com<COMMS;com++){
+                weekProfit[1]+=data[month][day][com];
+            }
+        }
+        for (int day = 14; day < 21; day++) {
+            for (int com = 0; com < COMMS; com++) {
+                weekProfit[2] += data[month][day][com];
+            }
+        }
+        for (int day = 21; day < 28; day++) {
+            for (int com = 0; com < COMMS; com++) {
+                weekProfit[3] += data[month][day][com];
+            }
+        }
+        int maxWeek=0;
+        for(int i=1;i<weekProfit.length;i++){
+            if(weekProfit[i]>weekProfit[maxWeek]){
+                maxWeek=i;
+            }
+        }
+            return "Week "+ (maxWeek+1);
         }
 
         public static void main (String[]args){
