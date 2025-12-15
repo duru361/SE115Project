@@ -1,6 +1,7 @@
 // Main.java — Students version
 import java.io.*;
 import java.util.*;
+import java.nio.file.Paths;
 
 public class Main {
     static final int MONTHS = 12;
@@ -13,6 +14,30 @@ public class Main {
 
     // ======== REQUIRED METHOD LOAD DATA (Students fill this) ========
     public static void loadData() {
+        Scanner reader=null;
+        try {
+            for(int month=0;month<MONTHS;month++){
+                String file=months[month]+".txt";
+                reader=new Scanner(Paths.get("Data_Files",file));
+
+                while (reader.hasNextLine()){
+                    int day=0;
+                    int comCount=0;
+                    String[]parts=reader.nextLine().split(",");
+                    int comNum=-1;
+                    for(int i=0;i<COMMS;i++){
+                    if(parts[1].equals(commodities[i])){
+                        comNum=i;
+                        break;
+                       }
+                    }
+                    for(int i=0;i< parts.length;i++){
+                        data[month][day][comNum]=Integer.parseInt(parts[2]);
+                    }
+                }
+            }
+        }
+
 
     }
 
@@ -90,7 +115,7 @@ public class Main {
                     highestProfitDay=i;
                 }
             }
-            return highestProfitDay+1;
+            return (highestProfitDay+1);
         }
     
         public static String bestMonthForCommodity(String comm) {
@@ -103,7 +128,8 @@ public class Main {
                     break;
                 }
             }
-            if (comNum == -1) return "INVALID_COMMODITY";
+            if (comNum == -1)
+                return "INVALID_COMMODITY";
 
             for (int month = 0; month < MONTHS; month++) {
                 for (int day = 0; day < DAYS; day++) {
