@@ -10,7 +10,7 @@ public class Main {
     static String[] commodities = {"Gold", "Oil", "Silver", "Wheat", "Copper"};
     static String[] months = {"January","February","March","April","May","June",
                               "July","August","September","October","November","December"};
-    public static int[][][] data =new int[12][28][5];
+     static int[][][] data =new int[MONTHS][DAYS][COMMS];
 
     // ======== REQUIRED METHOD LOAD DATA (Students fill this) ========
     public static void loadData() {
@@ -19,11 +19,12 @@ public class Main {
             for(int month=0;month<MONTHS;month++){
                 String file=months[month]+".txt";
                 reader=new Scanner(Paths.get("Data_Files",file));
+                reader.nextLine();
 
                 while (reader.hasNextLine()){
-                    int day=0;
-                    int comCount=0;
                     String[]parts=reader.nextLine().split(",");
+                    int day=Integer.parseInt(parts[0])-1;
+                    int profit=Integer.parseInt(parts[2]);
                     int comNum=-1;
                     for(int i=0;i<COMMS;i++){
                     if(parts[1].equals(commodities[i])){
@@ -31,14 +32,15 @@ public class Main {
                         break;
                        }
                     }
-                    for(int i=0;i< parts.length;i++){
-                        data[month][day][comNum]=Integer.parseInt(parts[2]);
-                    }
+                    data[month][day][comNum]=profit;
+
                 }
+                reader.close();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
-
-
     }
 
     // ======== 10 REQUIRED METHODS (Students fill these) ========
