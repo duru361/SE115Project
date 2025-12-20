@@ -14,20 +14,19 @@ public class Main {
 
     // ======== REQUIRED METHOD LOAD DATA (Students fill this) ========
     public static void loadData() {
-        Scanner reader=null;
         try {
             for(int month=0;month<MONTHS;month++){
                 String file=months[month]+".txt";
-                reader=new Scanner(Paths.get("Data_Files",file));
+               Scanner reader=new Scanner(Paths.get("Data_Files",file));
                 reader.nextLine();
 
                 while (reader.hasNextLine()){
                     String[]parts=reader.nextLine().split(",");
-                    int day=Integer.parseInt(parts[0])-1;
-                    int profit=Integer.parseInt(parts[2]);
+                    int day=Integer.parseInt(parts[0].trim())-1;
+                    int profit=Integer.parseInt(parts[2].trim());
                     int comNum=-1;
                     for(int i=0;i<COMMS;i++){
-                    if(parts[1].equals(commodities[i])){
+                    if(parts[1].trim().equals(commodities[i])){
                         comNum=i;
                         break;
                        }
@@ -38,7 +37,6 @@ public class Main {
                 reader.close();
             }
         } catch (Exception e) {
-            e.printStackTrace();
 
         }
     }
@@ -47,7 +45,7 @@ public class Main {
 
     public static String mostProfitableCommodityInMonth(int month) {
         if(month<0||month>11){
-            return "INVALID_MONTH";
+            return "INVALID_MONTH" ;
         }
         int[] sum=new int[COMMS];
         for(int i=0;i<DAYS;i++){
@@ -68,11 +66,11 @@ public class Main {
 
     public static int totalProfitOnDay(int month, int day) {
         int totalProfit=0;
-        if(month<0||month>11||day<0||day>27){
+        if(month<0||month>11||day<1||day>28){
             return -99999;
         }
         for(int i=0;i<COMMS;i++){
-            totalProfit+=data[month][day][i];
+            totalProfit+=data[month][day-1][i];
         }
         return totalProfit;
        }
@@ -89,12 +87,12 @@ public class Main {
             }
             if(comNum==-1) return -99999;
 
-            if(from < 0||to < 0||to > 27||from > to) {
+            if(from < 1||to < 1||to > 28||from > to) {
                 return -99999;
             }
 
             for(int month=0;month<MONTHS;month++) {
-                for (int i = from; i < to; i++) {
+                for (int i = from-1; i <= to-1; i++) {
                     totalProfit += data[month][i][comNum];
                 }
             }
@@ -102,7 +100,8 @@ public class Main {
         }
 
         public static int bestDayOfMonth(int month) {
-            if(month<0||month>11) return -1;
+            if(month<0||month>11)
+                return -1;
             int[] profit=new int[DAYS];
             int highestProfitDay=0;
             for(int day=0;day<DAYS;day++){
@@ -131,7 +130,7 @@ public class Main {
                 }
             }
             if (comNum == -1)
-                return "INVALID_COMMODITY";
+                return "INVALID_COMMODITY" ;
 
             for (int month = 0; month < MONTHS; month++) {
                 for (int day = 0; day < DAYS; day++) {
@@ -185,7 +184,8 @@ public class Main {
                  break;
              }
          }
-         if(comNum==-1) return -1;
+         if(comNum==-1)
+             return -1;
 
          for(int month=0;month<MONTHS;month++){
              for(int day=0;day<DAYS;day++){
@@ -256,7 +256,7 @@ public class Main {
                 comm=c2;
                 difference=profitOfC2-profitOfC1;
             }
-            else return "Equal";
+            else return "Equal ";
 
             return comm +" is better by "+difference;
         }
@@ -292,7 +292,7 @@ public class Main {
                 maxWeek=i;
             }
         }
-            return "Week "+ (maxWeek+1);
+            return "Week "+(maxWeek+1);
         }
 
         public static void main (String[]args){
