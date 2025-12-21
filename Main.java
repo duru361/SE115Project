@@ -256,9 +256,9 @@ public class Main {
                 comm=c2;
                 difference=profitOfC2-profitOfC1;
             }
-            else return "Equal ";
+            else return "Equal";
 
-            return comm +" is better by "+difference;
+            return comm+" is better by "+difference;
         }
 
         public static String bestWeekOfMonth ( int month){
